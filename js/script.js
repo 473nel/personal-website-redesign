@@ -17,6 +17,9 @@
      8. Scroll spy                (marks the current nav link with aria-current)
      9. Copy email button         (Clipboard API with an execCommand fallback)
 
+   The final touch:
+    10. Hero parallax             (title and captions drift at different speeds)
+
    Each feature lives in its own function so the file stays easy to follow.
    ========================================================================== */
 
@@ -628,6 +631,52 @@ function initCopyEmail() {
 }
 
 /* ==========================================================================
+   10. HERO PARALLAX
+   As the page scrolls the big title and the corner captions move at
+   slightly different speeds, which adds depth without a library. The work
+   is done inside requestAnimationFrame so the browser only recalculates
+   once per frame, and the movement is capped so the text never drifts away.
+   ========================================================================== */
+
+var heroTitle = document.querySelector(".hero-title");
+var heroNotes = document.querySelectorAll(".hero-note");
+var parallaxTicking = false;
+
+function updateHeroParallax() {
+  // At most 600px of scrolling counts, then the movement stops.
+  var offset = Math.min(window.scrollY, 600);
+
+  if (heroTitle) {
+    heroTitle.style.transform = "translate3d(0, " + (offset * 0.12) + "px, 0)";
+  }
+
+  heroNotes.forEach(function (note) {
+    note.style.transform = "translate3d(0, " + (offset * 0.24) + "px, 0)";
+  });
+
+  parallaxTicking = false;
+}
+
+function initHeroParallax() {
+  if (!heroTitle) {
+    return;
+  }
+
+  // Skip the effect entirely for visitors who prefer reduced motion.
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    return;
+  }
+
+  window.addEventListener("scroll", function () {
+    if (parallaxTicking) {
+      return;
+    }
+    parallaxTicking = true;
+    window.requestAnimationFrame(updateHeroParallax);
+  }, { passive: true });
+}
+
+/* ==========================================================================
    START EVERYTHING
    The script uses "defer", so the full HTML already exists when it runs.
    ========================================================================== */
@@ -641,3 +690,4 @@ initScrollReveal();
 initCounters();
 initScrollSpy();
 initCopyEmail();
+initHeroParallax();

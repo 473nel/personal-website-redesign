@@ -228,6 +228,8 @@ a {
    two hairline rules that frame the composition. */
 .hero {
   position: relative;
+  isolation: isolate;
+  overflow: hidden;
   max-width: 1040px;
   min-height: min(84vh, 760px);
   margin: 0 auto;
@@ -258,6 +260,77 @@ a {
 
 .hero::after {
   right: clamp(0.75rem, 3vw, 1.5rem);
+}
+
+/* Two blurred colour fields drifting slowly behind the hero text. */
+.hero-glow {
+  position: absolute;
+  inset: -20% -10%;
+  z-index: -1;
+  pointer-events: none;
+  opacity: var(--glow-opacity, 0.55);
+}
+
+html[data-theme="dark"] .hero-glow {
+  --glow-opacity: 0.4;
+}
+
+.hero-glow::before,
+.hero-glow::after {
+  content: "";
+  position: absolute;
+  width: 42vw;
+  height: 42vw;
+  max-width: 560px;
+  max-height: 560px;
+  border-radius: 50%;
+  filter: blur(60px);
+}
+
+.hero-glow::before {
+  top: -6%;
+  left: 4%;
+  background: radial-gradient(circle, rgba(0, 113, 227, 0.38), transparent 65%);
+  animation: drift 19s ease-in-out infinite alternate;
+}
+
+.hero-glow::after {
+  right: 2%;
+  bottom: -12%;
+  background: radial-gradient(circle, rgba(41, 151, 255, 0.3), transparent 65%);
+  animation: drift 25s ease-in-out infinite alternate-reverse;
+}
+
+/* ---------- Marquee ---------- */
+.marquee {
+  overflow: hidden;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  padding: 0.9rem 0;
+  background: var(--surface-soft);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  gap: 3rem;
+  animation: marquee 28s linear infinite;
+}
+
+.marquee span {
+  font-size: 0.76rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+/* Pausing on hover makes the strip feel interactive instead of decorative. */
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
 }
 
 .eyebrow {
@@ -886,9 +959,32 @@ a {
   }
 }
 
-/* Hero children rise in one after another when the page loads. */
-.hero > * {
-  animation: fadeUp 0.85s var(--ease) both;
+/* The two blurred hero circles. They breathe rather than spin, so the
+   movement stays calm instead of distracting. */
+@keyframes drift {
+  from {
+    transform: translate3d(-3%, -2%, 0) scale(1);
+  }
+  to {
+    transform: translate3d(4%, 3%, 0) scale(1.12);
+  }
+}
+
+/* The strip is duplicated, so moving it by half its width loops perfectly. */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* Hero children rise in one after another when the page loads.
+   "backwards" keeps them hidden during the delay, then hands control back
+   to the inline transform used by the scroll parallax in script.js. */
+.hero > *:not(.hero-glow) {
+  animation: fadeUp 0.85s var(--ease) backwards;
 }
 
 .hero > :nth-child(2) { animation-delay: 0.08s; }
