@@ -58,12 +58,16 @@
         <span id="greeting" class="greeting">Good afternoon</span>
         <time id="clock" class="clock-time" datetime="">--:--:--</time>
       </p>
+
+      <!-- Small editorial captions in the corners of the hero -->
+      <p class="hero-note hero-note--left">Portfolio &middot; 2026</p>
+      <p class="hero-note hero-note--right">HTML &middot; CSS &middot; JavaScript</p>
     </section>
 
     <!-- ABOUT SECTION -->
     <section id="about" class="section">
       <div class="section-head reveal">
-        <p class="section-kicker">About</p>
+        <p class="section-kicker"><span class="kicker-index">01</span> About</p>
         <h2>A small site, built carefully.</h2>
       </div>
 
@@ -108,7 +112,7 @@
     <!-- PROJECTS SECTION -->
     <section id="projects" class="section">
       <div class="section-head reveal">
-        <p class="section-kicker">Projects</p>
+        <p class="section-kicker"><span class="kicker-index">02</span> Projects</p>
         <h2>Things I have built.</h2>
       </div>
 
@@ -123,7 +127,7 @@
       <div id="project-list" class="project-list">
         <article class="project-card reveal" data-keywords="personal website html css responsive git github">
           <div class="card-media">
-            <img src="https://picsum.photos/600/400?random=1" alt="Random landscape photo used as a project placeholder">
+            <img src="images/project-website.svg" alt="Abstract blue artwork for the Personal Website project" width="600" height="400">
           </div>
           <div class="card-body">
             <h3>Personal Website</h3>
@@ -134,7 +138,7 @@
 
         <article class="project-card reveal" data-keywords="javascript dom events forms clock theme animation">
           <div class="card-media">
-            <img src="https://picsum.photos/600/400?random=2" alt="Random landscape photo used as a project placeholder">
+            <img src="images/project-javascript.svg" alt="Abstract warm artwork for the JavaScript Enhancements project" width="600" height="400">
           </div>
           <div class="card-body">
             <h3>JavaScript Enhancements</h3>
@@ -145,7 +149,7 @@
 
         <article class="project-card reveal" data-keywords="css lab flexbox grid layout styling">
           <div class="card-media">
-            <img src="https://picsum.photos/600/400?random=3" alt="Random landscape photo used as a project placeholder">
+            <img src="images/project-css.svg" alt="Abstract teal artwork for the CSS Lab project" width="600" height="400">
           </div>
           <div class="card-body">
             <h3>CSS Lab</h3>
@@ -159,7 +163,7 @@
     <!-- CONTACT SECTION -->
     <section id="contact" class="section">
       <div class="section-head reveal">
-        <p class="section-kicker">Contact</p>
+        <p class="section-kicker"><span class="kicker-index">03</span> Contact</p>
         <h2>Say hello.</h2>
       </div>
 
@@ -216,8 +220,18 @@
 
   <!-- FOOTER -->
   <footer class="site-footer">
-    <p>&copy; 2026 Johnel Murray</p>
-    <p class="footer-note">Built with HTML, CSS and JavaScript.</p>
+    <div class="footer-brand">
+      <span class="brand brand--static" aria-hidden="true">JM</span>
+      <p>&copy; 2026 Johnel Murray</p>
+    </div>
+
+    <nav class="footer-nav" aria-label="Footer sections">
+      <a href="#about">About</a>
+      <a href="#projects">Projects</a>
+      <a href="#contact">Contact</a>
+    </nav>
+
+    <a class="footer-top" href="#top">Back to top &uarr;</a>
   </footer>
 
 </body>
