@@ -9,10 +9,18 @@
      4. Contact form              (character counter, validation, message list)
      5. Back to top button        (created by JavaScript, appears on scroll)
 
+   Two smaller scripts add the polish:
+     6. Scroll reveal             (sections fade in with IntersectionObserver)
+     7. Animated statistics       (numbers count up when they scroll into view)
+
    Each feature lives in its own function so the file stays easy to follow.
    ========================================================================== */
 
 "use strict";
+
+/* The CSS hides .reveal elements only when this class is present, so the
+   page still works with JavaScript turned off. */
+document.documentElement.classList.add("js");
 
 /* ==========================================================================
    1. DARK / LIGHT MODE
@@ -291,7 +299,8 @@ var SCROLL_THRESHOLD = 250;
 function initBackToTop() {
   backToTopButton.type = "button";
   backToTopButton.className = "back-to-top";
-  backToTopButton.textContent = "Top";
+  // A simple arrow glyph; the real label is the aria-label below.
+  backToTopButton.textContent = "\u2191";
   backToTopButton.setAttribute("aria-label", "Back to top");
   backToTopButton.setAttribute("aria-hidden", "true");
   document.body.appendChild(backToTopButton);
@@ -312,6 +321,105 @@ function toggleBackToTop() {
 }
 
 /* ==========================================================================
+   6. SCROLL REVEAL
+   IntersectionObserver tells us when a section enters the screen, then the
+   CSS transition in style.css fades it up. Each element is only watched
+   once, so the animation does not repeat while scrolling up and down.
+   ========================================================================== */
+
+var revealObserver = null;
+
+function initScrollReveal() {
+  var revealItems = document.querySelectorAll(".reveal");
+
+  // Very old browsers, or reduced motion: show everything straight away.
+  var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (!("IntersectionObserver" in window) || reduceMotion) {
+    revealItems.forEach(function (item) {
+      item.classList.add("is-visible");
+    });
+    return;
+  }
+
+  revealObserver = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (!entry.isIntersecting) {
+        return;
+      }
+      entry.target.classList.add("is-visible");
+      revealObserver.unobserve(entry.target);
+    });
+  }, { threshold: 0.15 });
+
+  revealItems.forEach(function (item) {
+    revealObserver.observe(item);
+  });
+}
+
+/* ==========================================================================
+   7. ANIMATED STATISTICS
+   Each number counts from zero to the value stored in data-count. The
+   animation runs with requestAnimationFrame, which redraws smoothly and
+   stops on its own when it reaches the end.
+   ========================================================================== */
+
+var counterObserver = null;
+var COUNT_DURATION = 1100;
+
+function countUp(element) {
+  var target = parseInt(element.getAttribute("data-count"), 10) || 0;
+  var startTime = null;
+
+  function step(timestamp) {
+    if (startTime === null) {
+      startTime = timestamp;
+    }
+
+    var progress = Math.min((timestamp - startTime) / COUNT_DURATION, 1);
+    // Ease out: fast at the start, slow at the end.
+    var eased = 1 - Math.pow(1 - progress, 3);
+
+    element.textContent = String(Math.round(target * eased));
+
+    if (progress < 1) {
+      window.requestAnimationFrame(step);
+    }
+  }
+
+  window.requestAnimationFrame(step);
+}
+
+function initCounters() {
+  var numbers = document.querySelectorAll(".stat-number");
+
+  if (numbers.length === 0) {
+    return;
+  }
+
+  var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (!("IntersectionObserver" in window) || reduceMotion) {
+    numbers.forEach(function (number) {
+      number.textContent = number.getAttribute("data-count");
+    });
+    return;
+  }
+
+  counterObserver = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (!entry.isIntersecting) {
+        return;
+      }
+      countUp(entry.target);
+      counterObserver.unobserve(entry.target);
+    });
+  }, { threshold: 0.6 });
+
+  numbers.forEach(function (number) {
+    counterObserver.observe(number);
+  });
+}
+
+/* ==========================================================================
    START EVERYTHING
    The script uses "defer", so the full HTML already exists when it runs.
    ========================================================================== */
@@ -321,3 +429,5 @@ initClock();
 initProjectFilter();
 initContactForm();
 initBackToTop();
+initScrollReveal();
+initCounters();
