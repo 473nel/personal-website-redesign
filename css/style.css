@@ -1,0 +1,75 @@
+/* ---------- Basic styles (mobile first) ---------- */
+body {
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  margin: 0;
+  color: #222;
+  background: #f5f8fa;
+}
+
+header {
+  background: #2b6777;
+  color: white;
+  text-align: center;
+  padding: 1.5rem 1rem;
+}
+
+nav {
+  background: #1f4e5a;
+  display: flex;
+  flex-direction: column; /* links stack on mobile */
+  text-align: center;
+}
+
+nav a {
+  color: white;
+  padding: 0.75rem;
+  text-decoration: none;
+}
+
+nav a:hover {
+  background: #2b6777;
+}
+
+main {
+  padding: 1rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+section {
+  margin-bottom: 2rem;
+}
+
+img {
+  max-width: 100%; /* images never overflow the screen */
+  height: auto;
+}
+
+footer {
+  background: #1f4e5a;
+  color: white;
+  text-align: center;
+  padding: 1rem;
+}
+
+/* ---------- Tablet (600px and up) ---------- */
+@media (min-width: 600px) {
+  nav {
+    flex-direction: row; /* links sit side by side */
+    justify-content: center;
+  }
+  main {
+    padding: 2rem;
+  }
+}
+
+/* ---------- Desktop (1024px and up) ---------- */
+@media (min-width: 1024px) {
+  header h1 {
+    font-size: 2.5rem;
+  }
+  #projects article {
+    max-width: 600px;
+  }
+}
