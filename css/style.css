@@ -19,6 +19,10 @@
   --nav-bg: rgba(255, 255, 255, 0.72);
   --shadow-card: 0 12px 32px rgba(0, 0, 0, 0.08);
   --shadow-soft: 0 2px 10px rgba(0, 0, 0, 0.05);
+  /* A thin light line along the top edge makes cards read as objects. */
+  --card-inset: inset 0 1px 0 rgba(255, 255, 255, 0.75);
+  --card-shadow: var(--card-inset), var(--shadow-soft);
+  --card-shadow-hover: var(--card-inset), var(--shadow-card);
   --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
   color-scheme: light;
 }
@@ -38,6 +42,9 @@ html[data-theme="dark"] {
   --nav-bg: rgba(0, 0, 0, 0.72);
   --shadow-card: 0 12px 32px rgba(0, 0, 0, 0.55);
   --shadow-soft: 0 2px 10px rgba(0, 0, 0, 0.4);
+  --card-inset: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  --card-shadow: var(--card-inset), var(--shadow-soft);
+  --card-shadow-hover: var(--card-inset), var(--shadow-card);
   color-scheme: dark;
 }
 
@@ -217,13 +224,40 @@ a {
 }
 
 /* ---------- Hero ---------- */
+/* A centred editorial poster: big statement, small corner captions and
+   two hairline rules that frame the composition. */
 .hero {
+  position: relative;
   max-width: 1040px;
+  min-height: min(84vh, 760px);
   margin: 0 auto;
-  padding: clamp(4rem, 11vw, 8rem) clamp(1.25rem, 4vw, 2rem) clamp(3rem, 8vw, 6rem);
+  padding: clamp(4rem, 11vw, 8rem) clamp(1.25rem, 4vw, 2rem) clamp(5rem, 10vw, 7rem);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   text-align: center;
   background:
-    radial-gradient(60% 55% at 50% 0%, rgba(0, 113, 227, 0.12), transparent 70%);
+    radial-gradient(55% 50% at 50% 8%, rgba(0, 113, 227, 0.10), transparent 72%),
+    radial-gradient(40% 40% at 85% 100%, rgba(0, 113, 227, 0.05), transparent 70%);
+}
+
+.hero::before,
+.hero::after {
+  content: "";
+  position: absolute;
+  top: 12%;
+  bottom: 12%;
+  width: 1px;
+  background: linear-gradient(180deg, transparent, var(--line) 25%, var(--line) 75%, transparent);
+}
+
+.hero::before {
+  left: clamp(0.75rem, 3vw, 1.5rem);
+}
+
+.hero::after {
+  right: clamp(0.75rem, 3vw, 1.5rem);
 }
 
 .eyebrow {
@@ -324,12 +358,45 @@ a {
   font-weight: 600;
 }
 
+/* Corner captions, like the small type on an editorial spread. */
+.hero-note {
+  position: absolute;
+  bottom: 1.6rem;
+  margin: 0;
+  display: none;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  animation: none;
+}
+
+.hero-note--left {
+  left: clamp(1.5rem, 5vw, 2.75rem);
+}
+
+.hero-note--right {
+  right: clamp(1.5rem, 5vw, 2.75rem);
+}
+
+@media (min-width: 900px) {
+  .hero-note {
+    display: block;
+  }
+}
+
 /* ---------- Sections ---------- */
 .section {
   max-width: 1040px;
   margin: 0 auto;
   padding: clamp(3rem, 7vw, 5.5rem) clamp(1.25rem, 4vw, 2rem);
   border-top: 1px solid var(--line);
+}
+
+/* Slightly narrower reading measure for the contact section. */
+#contact {
+  max-width: 980px;
 }
 
 .section-head {
@@ -343,6 +410,14 @@ a {
   text-transform: uppercase;
   color: var(--accent);
   margin-bottom: 0.5rem;
+}
+
+/* The small section number in front of each kicker. */
+.kicker-index {
+  color: var(--muted);
+  font-weight: 500;
+  margin-right: 0.55rem;
+  font-variant-numeric: tabular-nums;
 }
 
 .section-head h2 {
@@ -362,7 +437,7 @@ a {
   border-radius: 22px;
   padding: 1.5rem;
   text-align: center;
-  box-shadow: var(--shadow-soft);
+  box-shadow: var(--card-shadow);
 }
 
 .profile-card img {
@@ -457,14 +532,14 @@ a {
   border: 1px solid var(--line);
   border-radius: 22px;
   overflow: hidden;
-  box-shadow: var(--shadow-soft);
+  box-shadow: var(--card-shadow);
   transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease),
     border-color 0.35s ease;
 }
 
 .project-card:hover {
   transform: translateY(-6px);
-  box-shadow: var(--shadow-card);
+  box-shadow: var(--card-shadow-hover);
   border-color: rgba(0, 113, 227, 0.35);
 }
 
@@ -542,7 +617,7 @@ a {
   border: 1px solid var(--line);
   border-radius: 22px;
   padding: 1.5rem;
-  box-shadow: var(--shadow-soft);
+  box-shadow: var(--card-shadow);
 }
 
 .contact-label {
@@ -706,18 +781,56 @@ a {
 .site-footer {
   max-width: 1040px;
   margin: 0 auto;
-  padding: 2.5rem clamp(1.25rem, 4vw, 2rem) 3.5rem;
+  padding: 2.25rem clamp(1.25rem, 4vw, 2rem) 3.25rem;
   border-top: 1px solid var(--line);
   font-size: 0.85rem;
   color: var(--muted);
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem 1rem;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  gap: 1rem 2rem;
 }
 
-.footer-note {
+.footer-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.footer-brand p {
+  margin: 0;
+}
+
+/* The footer monogram is decoration, so it does not animate on hover. */
+.brand--static,
+.brand--static:hover {
+  transform: none;
+  background: var(--accent);
+}
+
+.footer-nav {
+  display: flex;
+  gap: 1.35rem;
+}
+
+.footer-nav a,
+.footer-top {
   color: var(--muted);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.footer-nav a:hover,
+.footer-top:hover {
+  color: var(--text);
+}
+
+.footer-top {
+  white-space: nowrap;
+}
+
+.footer-top:hover {
+  color: var(--accent);
 }
 
 /* ---------- Feature 5: back to top button ---------- */
@@ -830,6 +943,19 @@ html.js .reveal.is-visible {
   .contact-grid {
     grid-template-columns: 1fr 1.15fr;
     align-items: start;
+  }
+}
+
+/* ---------- Small screens ---------- */
+@media (max-width: 700px) {
+  .site-footer {
+    grid-template-columns: 1fr;
+    justify-items: start;
+    gap: 1rem;
+  }
+
+  .footer-nav {
+    gap: 1rem;
   }
 }
 
