@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Johnel Murray | Personal Website</title>
+  <meta name="description" content="Personal website of Johnel Murray, a student and aspiring web developer learning HTML, CSS and JavaScript.">
   <!-- Browser tab icon -->
   <link rel="icon" type="image/svg+xml" href="images/favicon.svg">
   <!-- Link to the stylesheet in the css folder -->
@@ -14,13 +15,19 @@
 </head>
 <body>
 
-  <!-- HEADER: site title, introduction and the theme switch -->
-  <header>
-    <div class="header-inner">
-      <div>
-        <h1>Johnel Murray</h1>
-        <p>Student and aspiring web developer</p>
-      </div>
+  <!-- Skip link: lets keyboard users jump straight to the content -->
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- HEADER: sticky glass navigation bar -->
+  <header class="site-header">
+    <div class="nav-inner">
+      <a class="brand" href="#top" aria-label="Johnel Murray, back to top">JM</a>
+
+      <nav class="site-nav" aria-label="Page sections">
+        <a href="#about">About</a>
+        <a href="#projects">Projects</a>
+        <a href="#contact">Contact</a>
+      </nav>
 
       <!-- Feature 1: dark / light mode toggle.
            JavaScript updates the text, aria-pressed and the saved theme. -->
@@ -28,92 +35,170 @@
         Dark mode
       </button>
     </div>
-
-    <!-- Feature 2: live clock and a greeting based on the local time -->
-    <p class="clock">
-      <span id="greeting" class="greeting"></span>
-      <time id="clock" class="clock-time" datetime="">--:--:--</time>
-    </p>
   </header>
 
-  <!-- NAV: links that jump to each section of the page -->
-  <nav>
-    <a href="#about">About</a>
-    <a href="#projects">Projects</a>
-    <a href="#contact">Contact</a>
-  </nav>
+  <main id="main">
 
-  <main>
-    <!-- ABOUT SECTION: local image (from the images folder) -->
-    <section id="about">
-      <h2>About Me</h2>
-      <img src="images/profile.svg" alt="Illustration of a person in blue" width="150" height="150">
-      <p>Hello! I am a student learning HTML, CSS and GitHub. I enjoy building simple, clear websites.</p>
+    <!-- HERO: big statement, two calls to action, live clock -->
+    <section class="hero" id="top">
+      <p class="eyebrow">Johnel Murray &middot; student developer</p>
+      <h1 class="hero-title">Simple design.<br>Clear code.</h1>
+      <p class="hero-copy">
+        I build calm, responsive websites with semantic HTML, modern CSS
+        and just enough JavaScript to make them feel alive.
+      </p>
+      <div class="hero-actions">
+        <a class="button" href="#projects">View projects</a>
+        <a class="button button--ghost" href="#contact">Get in touch</a>
+      </div>
+
+      <!-- Feature 2: live clock and a greeting based on the local time -->
+      <p class="hero-meta">
+        <span class="status-dot" aria-hidden="true"></span>
+        <span id="greeting" class="greeting">Good afternoon</span>
+        <time id="clock" class="clock-time" datetime="">--:--:--</time>
+      </p>
     </section>
 
-    <!-- PROJECTS SECTION: online images plus a live search filter -->
-    <section id="projects">
-      <h2>Projects</h2>
+    <!-- ABOUT SECTION -->
+    <section id="about" class="section">
+      <div class="section-head reveal">
+        <p class="section-kicker">About</p>
+        <h2>A small site, built carefully.</h2>
+      </div>
+
+      <div class="about-grid">
+        <div class="profile-card reveal">
+          <img src="images/profile.svg" alt="Illustration of a person in blue" width="150" height="150">
+          <p class="profile-name">Johnel Murray</p>
+          <p class="profile-role">Student &middot; aspiring web developer</p>
+        </div>
+
+        <div class="about-copy reveal">
+          <p>
+            Hello! I am a student learning HTML, CSS and JavaScript. I enjoy
+            building websites that are simple to read, quick to load and easy
+            to use on any screen.
+          </p>
+          <p>
+            This site started as a plain HTML page, became responsive in my CSS
+            assignment, and now has interactive features written in an external
+            JavaScript file.
+          </p>
+
+          <!-- Animated statistics: the numbers count up when they scroll into view -->
+          <dl class="stats">
+            <div class="stat">
+              <dd><span class="stat-number" data-count="3">0</span></dd>
+              <dt>Projects</dt>
+            </div>
+            <div class="stat">
+              <dd><span class="stat-number" data-count="5">0</span></dd>
+              <dt>JS features</dt>
+            </div>
+            <div class="stat">
+              <dd><span class="stat-number" data-count="3">0</span></dd>
+              <dt>Breakpoints</dt>
+            </div>
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROJECTS SECTION -->
+    <section id="projects" class="section">
+      <div class="section-head reveal">
+        <p class="section-kicker">Projects</p>
+        <h2>Things I have built.</h2>
+      </div>
 
       <!-- Feature 3: search box that filters the project cards -->
-      <div class="project-filter">
-        <label for="project-search">Search projects</label>
-        <input type="search" id="project-search" placeholder="Try &quot;css&quot;, &quot;git&quot; or &quot;javascript&quot;">
+      <div class="filter-row reveal">
+        <label class="sr-only" for="project-search">Search projects</label>
+        <input type="search" id="project-search" placeholder="Search projects&hellip;">
         <!-- aria-live tells screen readers when the result count changes -->
         <p id="filter-status" class="filter-status" role="status" aria-live="polite">Showing all 3 projects.</p>
       </div>
 
       <div id="project-list" class="project-list">
-        <article class="project-card" data-keywords="personal website html css responsive git github">
-          <h3>Personal Website</h3>
-          <img src="https://picsum.photos/600/300?random=1" alt="Random landscape photo used as a project placeholder">
-          <p>This website was redesigned using semantic HTML, responsive CSS and Git branches.</p>
+        <article class="project-card reveal" data-keywords="personal website html css responsive git github">
+          <div class="card-media">
+            <img src="https://picsum.photos/600/400?random=1" alt="Random landscape photo used as a project placeholder">
+          </div>
+          <div class="card-body">
+            <h3>Personal Website</h3>
+            <p>This website was redesigned using semantic HTML, responsive CSS and Git branches.</p>
+            <p class="tags"><span>HTML</span><span>CSS</span><span>Git</span></p>
+          </div>
         </article>
 
-        <article class="project-card" data-keywords="javascript dom events forms clock theme">
-          <h3>JavaScript Enhancements</h3>
-          <img src="https://picsum.photos/600/300?random=2" alt="Random landscape photo used as a project placeholder">
-          <p>Five interactive features added with an external JavaScript file: theme toggle, clock, filter, form validation and back to top.</p>
+        <article class="project-card reveal" data-keywords="javascript dom events forms clock theme animation">
+          <div class="card-media">
+            <img src="https://picsum.photos/600/400?random=2" alt="Random landscape photo used as a project placeholder">
+          </div>
+          <div class="card-body">
+            <h3>JavaScript Enhancements</h3>
+            <p>Theme toggle, live clock, project filter, form validation and a back to top button.</p>
+            <p class="tags"><span>JavaScript</span><span>DOM</span><span>Events</span></p>
+          </div>
         </article>
 
-        <article class="project-card" data-keywords="css lab flexbox grid layout styling">
-          <h3>CSS Lab</h3>
-          <img src="https://picsum.photos/600/300?random=3" alt="Random landscape photo used as a project placeholder">
-          <p>Practice pages for Flexbox, Grid and responsive layouts built during class exercises.</p>
+        <article class="project-card reveal" data-keywords="css lab flexbox grid layout styling">
+          <div class="card-media">
+            <img src="https://picsum.photos/600/400?random=3" alt="Random landscape photo used as a project placeholder">
+          </div>
+          <div class="card-body">
+            <h3>CSS Lab</h3>
+            <p>Practice pages for Flexbox, Grid and responsive layouts built during class exercises.</p>
+            <p class="tags"><span>Flexbox</span><span>Grid</span><span>Layout</span></p>
+          </div>
         </article>
       </div>
     </section>
 
-    <!-- CONTACT SECTION: email link plus a validated form -->
-    <section id="contact">
-      <h2>Contact</h2>
-      <p>Email: <a href="mailto:JohnelM6579@TAMCC.EDU.GD">JohnelM6579@TAMCC.EDU.GD</a></p>
+    <!-- CONTACT SECTION -->
+    <section id="contact" class="section">
+      <div class="section-head reveal">
+        <p class="section-kicker">Contact</p>
+        <h2>Say hello.</h2>
+      </div>
 
-      <!-- Feature 4: contact form with a live character counter,
-           inline validation and a list of messages sent in this session -->
-      <form id="contact-form" class="contact-form" novalidate>
-        <div class="field">
-          <label for="name">Name</label>
-          <input type="text" id="name" name="name" autocomplete="name">
+      <div class="contact-grid">
+        <div class="contact-card reveal">
+          <p class="contact-label">Email</p>
+          <a class="contact-email" href="mailto:JohnelM6579@TAMCC.EDU.GD">JohnelM6579@TAMCC.EDU.GD</a>
+          <p class="contact-note">
+            The form is a front end demo, so nothing is sent to a server. It
+            checks the fields and shows the message straight away.
+          </p>
         </div>
 
-        <div class="field">
-          <label for="email">Email</label>
-          <input type="email" id="email" name="email" autocomplete="email">
-        </div>
+        <!-- Feature 4: contact form with a live character counter,
+             inline validation and a list of messages sent in this session -->
+        <form id="contact-form" class="contact-form reveal" novalidate>
+          <div class="field">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" autocomplete="name">
+          </div>
 
-        <div class="field">
-          <label for="message">Message</label>
-          <textarea id="message" name="message" rows="4" maxlength="300"></textarea>
-          <!-- JavaScript keeps this counter up to date while typing -->
-          <p id="char-count" class="char-count">300 characters left</p>
-        </div>
+          <div class="field">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" autocomplete="email">
+          </div>
 
-        <button type="submit" class="button">Send message</button>
+          <div class="field">
+            <label for="message">Message</label>
+            <textarea id="message" name="message" rows="4" maxlength="300"></textarea>
+            <!-- JavaScript keeps this counter up to date while typing -->
+            <p id="char-count" class="char-count">300 characters left</p>
+          </div>
 
-        <!-- JavaScript writes success or error feedback here -->
-        <p id="form-feedback" class="form-feedback" role="status" aria-live="polite"></p>
-      </form>
+          <button type="submit" class="button button--full">Send message</button>
+
+          <!-- JavaScript writes success or error feedback here -->
+          <p id="form-feedback" class="form-feedback" role="status" aria-live="polite"></p>
+        </form>
+      </div>
 
       <!-- Messages added by JavaScript appear in this list -->
       <ul id="sent-messages" class="sent-messages"></ul>
@@ -121,8 +206,9 @@
   </main>
 
   <!-- FOOTER -->
-  <footer>
+  <footer class="site-footer">
     <p>&copy; 2026 Johnel Murray</p>
+    <p class="footer-note">Built with HTML, CSS and JavaScript.</p>
   </footer>
 
 </body>
