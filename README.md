@@ -12,8 +12,11 @@ A personal website for Johnel Murray with a hero, About, Projects and Contact se
 ## Visual Design
 - One accent colour (blue), soft greys and lots of space, in the style of the Apple website.
 - A sticky "glass" navigation bar that blurs the content behind it.
-- Large display type in the hero with a short statement and two clear buttons.
-- Rounded cards with a soft shadow; they lift slightly and their photo zooms when hovered.
+- An editorial hero: large display type, two clear buttons, small corner captions and two hairline rules that frame the composition.
+- Numbered section labels (01, 02, 03) so the page reads like a magazine spread.
+- Rounded cards with a soft shadow and a light top edge; they lift slightly and their artwork zooms when hovered.
+- Custom SVG artwork for every project, so the page is consistent, fast and works offline.
+- A footer row with the monogram, copyright, section links and a "Back to top" link.
 - A full dark theme that switches instantly and is remembered.
 
 ## JavaScript Enhancements
@@ -45,13 +48,16 @@ personal-website-redesign/
 │   └── script.js
 └── images/
     ├── favicon.svg
-    └── profile.svg
+    ├── profile.svg
+    ├── project-css.svg
+    ├── project-javascript.svg
+    └── project-website.svg
 ```
 
 ## How to Run
 1. Clone or download this repository.
 2. Open `index.html` in any modern web browser.
-3. No build tools are needed. The project images load from an online placeholder service.
+3. No build tools or internet connection are needed; every image is stored in the repository.
 
 ## GitHub Pages
 https://473nel.github.io/personal-website-redesign/
