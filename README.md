@@ -29,16 +29,15 @@ A personal website for Johnel Murray with a hero, About, Projects and Contact se
 ## Animation Polish
 6. **Scroll reveal** – an `IntersectionObserver` adds a class when a section scrolls into view, and CSS fades and lifts it into place. Elements are only watched once, so the effect does not loop.
 7. **Animated statistics** – the three numbers in the About section count up from zero with `requestAnimationFrame` and an ease-out curve the first time they are seen.
-8. **Marquee strip** – the tools used on the site scroll past in a slow endless loop. The list is written twice and moved by 50% with a CSS `@keyframes` rule, which makes the loop seamless; hovering pauses it, and it is marked `aria-hidden` because the text is decorative.
-9. **Drifting hero glow** – two large blurred circles behind the hero breathe in and out over 19 and 25 seconds, giving the page quiet movement instead of a static gradient.
-10. **Hero parallax** – while scrolling, the title moves at `0.12 × scroll` and the corner captions at `0.24 × scroll`, capped at 600 pixels. The calculation runs inside `requestAnimationFrame` so it only happens once per frame.
+8. **Drifting hero glow** – two large blurred circles behind the hero breathe in and out over 19 and 25 seconds, giving the page quiet movement instead of a static gradient.
+9. **Hero parallax** – while scrolling, the title moves at `0.12 × scroll` and the corner captions at `0.24 × scroll`, capped at 600 pixels. The calculation runs inside `requestAnimationFrame` so it only happens once per frame.
 
 All animation is disabled automatically for visitors who turn on "reduce motion" in their operating system.
 
 ## Extra Interactions
-11. **Scroll spy navigation** – an `IntersectionObserver` with a narrow middle band marks the nav link for the section currently being read, using `aria-current` so assistive technology gets the same cue.
-12. **Draft autosave** – while the visitor types, the contact form is stored as JSON in `localStorage` (debounced by 350 ms). Reloading the page brings the draft back, and sending the message clears it.
-13. **Copy email button** – `navigator.clipboard.writeText()` copies the address, with an `execCommand("copy")` fallback for plain `http` pages. The button changes to "Copied" for a moment and a live region announces the result.
+10. **Scroll spy navigation** – an `IntersectionObserver` with a narrow middle band marks the nav link for the section currently being read, using `aria-current` so assistive technology gets the same cue.
+11. **Draft autosave** – while the visitor types, the contact form is stored as JSON in `localStorage` (debounced by 350 ms). Reloading the page brings the draft back, and sending the message clears it.
+12. **Copy email button** – `navigator.clipboard.writeText()` copies the address, with an `execCommand("copy")` fallback for plain `http` pages. The button changes to "Copied" for a moment and a live region announces the result.
 
 ## Folder Structure
 ```
