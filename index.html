@@ -166,7 +166,13 @@
       <div class="contact-grid">
         <div class="contact-card reveal">
           <p class="contact-label">Email</p>
-          <a class="contact-email" href="mailto:JohnelM6579@TAMCC.EDU.GD">JohnelM6579@TAMCC.EDU.GD</a>
+          <div class="contact-email-row">
+            <a class="contact-email" href="mailto:JohnelM6579@TAMCC.EDU.GD">JohnelM6579@TAMCC.EDU.GD</a>
+            <!-- Copies the address with the Clipboard API -->
+            <button type="button" id="copy-email" class="copy-button">Copy</button>
+          </div>
+          <!-- Small text that confirms the copy worked -->
+          <p id="copy-status" class="copy-status" role="status" aria-live="polite"></p>
           <p class="contact-note">
             The form is a front end demo, so nothing is sent to a server. It
             checks the fields and shows the message straight away.
@@ -197,6 +203,9 @@
 
           <!-- JavaScript writes success or error feedback here -->
           <p id="form-feedback" class="form-feedback" role="status" aria-live="polite"></p>
+
+          <!-- Tells the visitor their draft was saved or restored -->
+          <p id="draft-status" class="draft-status" role="status" aria-live="polite"></p>
         </form>
       </div>
 

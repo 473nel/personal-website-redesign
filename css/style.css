@@ -179,6 +179,25 @@ a {
   color: var(--text);
 }
 
+/* Set by the scroll spy in script.js. */
+.site-nav a.is-active {
+  color: var(--text);
+  font-weight: 600;
+  position: relative;
+}
+
+.site-nav a.is-active::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -0.4rem;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--accent);
+  transform: translateX(-50%);
+}
+
 .theme-toggle {
   margin-left: auto;
   font: inherit;
@@ -544,6 +563,45 @@ a {
 
 .contact-email:hover {
   text-decoration: underline;
+}
+
+/* Email + copy button on one line, wrapping on small screens. */
+.contact-email-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.copy-button {
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--surface-soft);
+  color: var(--muted);
+  transition: color 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.copy-button:hover {
+  color: var(--text);
+  border-color: var(--accent);
+  background: var(--surface);
+}
+
+.copy-status,
+.draft-status {
+  margin: 0.45rem 0 0;
+  font-size: 0.8rem;
+  min-height: 1em;
+  color: var(--muted);
+}
+
+.copy-status {
+  color: var(--success);
 }
 
 .contact-note {

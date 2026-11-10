@@ -13,6 +13,10 @@
      6. Scroll reveal             (sections fade in with IntersectionObserver)
      7. Animated statistics       (numbers count up when they scroll into view)
 
+   And two more that make the page feel finished:
+     8. Scroll spy                (marks the current nav link with aria-current)
+     9. Copy email button         (Clipboard API with an execCommand fallback)
+
    Each feature lives in its own function so the file stays easy to follow.
    ========================================================================== */
 
@@ -276,15 +280,105 @@ function handleFormSubmit(event) {
   formFeedback.textContent = "Thanks " + name + "! Your message has been added below.";
   formFeedback.className = "form-feedback is-success";
 
-  // Clear the form and reset the counter.
+  // Clear the form, reset the counter and drop the saved draft.
   contactForm.reset();
   updateCharacterCount();
+  clearDraft();
+}
+
+/* ---------- Draft autosave (part of the contact form) ----------
+   While the visitor types, the three values are stored in localStorage as
+   JSON. On the next visit they are put back, unless the form was already
+   sent. This is handy on a phone where the tab can be closed by accident. */
+
+var draftStatus = document.getElementById("draft-status");
+var DRAFT_KEY = "johnel-contact-draft";
+var draftSaveTimer = null;
+var draftStatusTimer = null;
+
+function showDraftStatus(text) {
+  draftStatus.textContent = text;
+
+  window.clearTimeout(draftStatusTimer);
+  if (text !== "") {
+    draftStatusTimer = window.setTimeout(function () {
+      draftStatus.textContent = "";
+    }, 2000);
+  }
+}
+
+function saveDraft() {
+  var draft = {
+    name: contactForm.elements["name"].value,
+    email: contactForm.elements["email"].value,
+    message: messageField.value
+  };
+
+  // Ignore an empty form so an empty draft never hides an older one.
+  if (draft.name === "" && draft.email === "" && draft.message === "") {
+    return;
+  }
+
+  try {
+    localStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
+    showDraftStatus("Draft saved");
+  } catch (error) {
+    console.warn("Draft was not saved:", error);
+  }
+}
+
+function restoreDraft() {
+  var savedDraft = null;
+
+  try {
+    savedDraft = localStorage.getItem(DRAFT_KEY);
+  } catch (error) {
+    savedDraft = null;
+  }
+
+  if (!savedDraft) {
+    return;
+  }
+
+  try {
+    var draft = JSON.parse(savedDraft);
+    contactForm.elements["name"].value = draft.name || "";
+    contactForm.elements["email"].value = draft.email || "";
+    messageField.value = draft.message || "";
+
+    updateCharacterCount();
+
+    if (draft.name || draft.email || draft.message) {
+      showDraftStatus("Draft restored");
+    }
+  } catch (error) {
+    // A corrupt value should never break the page.
+    localStorage.removeItem(DRAFT_KEY);
+  }
+}
+
+function clearDraft() {
+  showDraftStatus("");
+  try {
+    localStorage.removeItem(DRAFT_KEY);
+  } catch (error) {
+    // Storage can be blocked; nothing else to do.
+  }
+}
+
+function scheduleDraftSave() {
+  window.clearTimeout(draftSaveTimer);
+  draftSaveTimer = window.setTimeout(saveDraft, 350);
 }
 
 function initContactForm() {
   messageField.addEventListener("input", updateCharacterCount);
   contactForm.addEventListener("submit", handleFormSubmit);
   updateCharacterCount();
+
+  // Save a draft shortly after the visitor stops typing.
+  contactForm.addEventListener("input", scheduleDraftSave);
+  restoreDraft();
 }
 
 /* ==========================================================================
@@ -420,6 +514,120 @@ function initCounters() {
 }
 
 /* ==========================================================================
+   8. SCROLL SPY
+   The same IntersectionObserver idea as the reveal, but here it watches the
+   three sections and marks the navigation link for the section on screen
+   with aria-current. The observer's root is squeezed into a thin band in
+   the middle of the window, so a section only counts while it is being read.
+   ========================================================================== */
+
+function initScrollSpy() {
+  var links = document.querySelectorAll(".site-nav a[href^='#']");
+
+  if (links.length === 0 || !("IntersectionObserver" in window)) {
+    return;
+  }
+
+  var items = [];
+
+  links.forEach(function (link) {
+    var section = document.querySelector(link.getAttribute("href"));
+    if (section) {
+      items.push({ link: link, section: section });
+    }
+  });
+
+  function setActive(activeSection) {
+    items.forEach(function (item) {
+      var isActive = item.section === activeSection;
+      item.link.classList.toggle("is-active", isActive);
+
+      if (isActive) {
+        item.link.setAttribute("aria-current", "true");
+      } else {
+        item.link.removeAttribute("aria-current");
+      }
+    });
+  }
+
+  var observer = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        setActive(entry.target);
+      }
+    });
+  }, { rootMargin: "-45% 0px -50% 0px" });
+
+  items.forEach(function (item) {
+    observer.observe(item.section);
+  });
+}
+
+/* ==========================================================================
+   9. COPY EMAIL BUTTON
+   navigator.clipboard is the modern way to copy text. It only works on
+   https or localhost, so there is a fallback that selects the text and uses
+   the older execCommand("copy"). The button label confirms the result.
+   ========================================================================== */
+
+var EMAIL_ADDRESS = "JohnelM6579@TAMCC.EDU.GD";
+var copyButton = document.getElementById("copy-email");
+var copyStatus = document.getElementById("copy-status");
+var copyResetTimer = null;
+
+function showCopyResult(message) {
+  copyStatus.textContent = message;
+  copyButton.textContent = message === "Copied!" ? "Copied" : "Copy";
+
+  window.clearTimeout(copyResetTimer);
+  copyResetTimer = window.setTimeout(function () {
+    copyStatus.textContent = "";
+    copyButton.textContent = "Copy";
+  }, 1800);
+}
+
+function copyEmailFallback() {
+  var temp = document.createElement("textarea");
+  temp.value = EMAIL_ADDRESS;
+  temp.setAttribute("readonly", "");
+  temp.style.position = "fixed";
+  temp.style.opacity = "0";
+  document.body.appendChild(temp);
+
+  temp.select();
+  var worked = false;
+
+  try {
+    worked = document.execCommand("copy");
+  } catch (error) {
+    worked = false;
+  }
+
+  temp.remove();
+  showCopyResult(worked ? "Copied!" : "Copy failed, please select the address.");
+}
+
+function initCopyEmail() {
+  if (!copyButton) {
+    return;
+  }
+
+  copyButton.addEventListener("click", function () {
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(EMAIL_ADDRESS).then(function () {
+        showCopyResult("Copied!");
+      }, function () {
+        // Permission refused: try the older method instead.
+        copyEmailFallback();
+      });
+      return;
+    }
+
+    copyEmailFallback();
+  });
+}
+
+/* ==========================================================================
    START EVERYTHING
    The script uses "defer", so the full HTML already exists when it runs.
    ========================================================================== */
@@ -431,3 +639,5 @@ initContactForm();
 initBackToTop();
 initScrollReveal();
 initCounters();
+initScrollSpy();
+initCopyEmail();
