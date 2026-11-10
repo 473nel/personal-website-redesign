@@ -4,15 +4,36 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Johnel Murray | Personal Website</title>
+  <!-- Browser tab icon -->
+  <link rel="icon" type="image/svg+xml" href="images/favicon.svg">
   <!-- Link to the stylesheet in the css folder -->
   <link rel="stylesheet" href="css/style.css">
+  <!-- External JavaScript file. "defer" waits for the HTML to finish
+       parsing before the script runs, so every element can be found. -->
+  <script src="js/script.js" defer></script>
 </head>
 <body>
 
-  <!-- HEADER: site title and introduction -->
+  <!-- HEADER: site title, introduction and the theme switch -->
   <header>
-    <h1>Johnel Murray</h1>
-    <p>Student and aspiring web developer</p>
+    <div class="header-inner">
+      <div>
+        <h1>Johnel Murray</h1>
+        <p>Student and aspiring web developer</p>
+      </div>
+
+      <!-- Feature 1: dark / light mode toggle.
+           JavaScript updates the text, aria-pressed and the saved theme. -->
+      <button id="theme-toggle" class="theme-toggle" type="button" aria-pressed="false">
+        Dark mode
+      </button>
+    </div>
+
+    <!-- Feature 2: live clock and a greeting based on the local time -->
+    <p class="clock">
+      <span id="greeting" class="greeting"></span>
+      <time id="clock" class="clock-time" datetime="">--:--:--</time>
+    </p>
   </header>
 
   <!-- NAV: links that jump to each section of the page -->
@@ -30,20 +51,72 @@
       <p>Hello! I am a student learning HTML, CSS and GitHub. I enjoy building simple, clear websites.</p>
     </section>
 
-    <!-- PROJECTS SECTION: online image (loaded from a URL) -->
+    <!-- PROJECTS SECTION: online images plus a live search filter -->
     <section id="projects">
       <h2>Projects</h2>
-      <article>
-        <h3>Personal Website</h3>
-        <img src="https://picsum.photos/600/300" alt="Random landscape photo used as a project placeholder">
-        <p>This website was redesigned using semantic HTML, responsive CSS and Git branches.</p>
-      </article>
+
+      <!-- Feature 3: search box that filters the project cards -->
+      <div class="project-filter">
+        <label for="project-search">Search projects</label>
+        <input type="search" id="project-search" placeholder="Try &quot;css&quot;, &quot;git&quot; or &quot;javascript&quot;">
+        <!-- aria-live tells screen readers when the result count changes -->
+        <p id="filter-status" class="filter-status" role="status" aria-live="polite">Showing all 3 projects.</p>
+      </div>
+
+      <div id="project-list" class="project-list">
+        <article class="project-card" data-keywords="personal website html css responsive git github">
+          <h3>Personal Website</h3>
+          <img src="https://picsum.photos/600/300?random=1" alt="Random landscape photo used as a project placeholder">
+          <p>This website was redesigned using semantic HTML, responsive CSS and Git branches.</p>
+        </article>
+
+        <article class="project-card" data-keywords="javascript dom events forms clock theme">
+          <h3>JavaScript Enhancements</h3>
+          <img src="https://picsum.photos/600/300?random=2" alt="Random landscape photo used as a project placeholder">
+          <p>Five interactive features added with an external JavaScript file: theme toggle, clock, filter, form validation and back to top.</p>
+        </article>
+
+        <article class="project-card" data-keywords="css lab flexbox grid layout styling">
+          <h3>CSS Lab</h3>
+          <img src="https://picsum.photos/600/300?random=3" alt="Random landscape photo used as a project placeholder">
+          <p>Practice pages for Flexbox, Grid and responsive layouts built during class exercises.</p>
+        </article>
+      </div>
     </section>
 
-    <!-- CONTACT SECTION -->
+    <!-- CONTACT SECTION: email link plus a validated form -->
     <section id="contact">
       <h2>Contact</h2>
       <p>Email: <a href="mailto:JohnelM6579@TAMCC.EDU.GD">JohnelM6579@TAMCC.EDU.GD</a></p>
+
+      <!-- Feature 4: contact form with a live character counter,
+           inline validation and a list of messages sent in this session -->
+      <form id="contact-form" class="contact-form" novalidate>
+        <div class="field">
+          <label for="name">Name</label>
+          <input type="text" id="name" name="name" autocomplete="name">
+        </div>
+
+        <div class="field">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" autocomplete="email">
+        </div>
+
+        <div class="field">
+          <label for="message">Message</label>
+          <textarea id="message" name="message" rows="4" maxlength="300"></textarea>
+          <!-- JavaScript keeps this counter up to date while typing -->
+          <p id="char-count" class="char-count">300 characters left</p>
+        </div>
+
+        <button type="submit" class="button">Send message</button>
+
+        <!-- JavaScript writes success or error feedback here -->
+        <p id="form-feedback" class="form-feedback" role="status" aria-live="polite"></p>
+      </form>
+
+      <!-- Messages added by JavaScript appear in this list -->
+      <ul id="sent-messages" class="sent-messages"></ul>
     </section>
   </main>
 

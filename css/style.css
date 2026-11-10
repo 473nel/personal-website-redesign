@@ -1,21 +1,114 @@
+/* ==========================================================================
+   Personal Website - styles
+   The colours are kept in variables so the JavaScript theme toggle can
+   swap them by changing one attribute on the <html> element.
+   ========================================================================== */
+
+:root {
+  --page: #f5f8fa;
+  --surface: #ffffff;
+  --text: #222222;
+  --muted: #4f626b;
+  --brand: #2b6777;
+  --brand-dark: #1f4e5a;
+  --border: #d3e0e5;
+  --danger: #b3261e;
+  --success: #1c6b3f;
+  color-scheme: light;
+}
+
+/* Dark theme: the same variables, different values. */
+html[data-theme="dark"] {
+  --page: #101a1e;
+  --surface: #16252b;
+  --text: #e8f1f4;
+  --muted: #a7bcc4;
+  --brand: #2f7f93;
+  --brand-dark: #122027;
+  --border: #2b3f47;
+  --danger: #ff9d95;
+  --success: #7ddba6;
+  color-scheme: dark;
+}
+
 /* ---------- Basic styles (mobile first) ---------- */
 body {
   font-family: Arial, sans-serif;
   line-height: 1.6;
   margin: 0;
-  color: #222;
-  background: #f5f8fa;
+  color: var(--text);
+  background: var(--page);
+  /* Keeps the colour change smooth when the theme is switched. */
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 header {
-  background: #2b6777;
+  background: var(--brand);
   color: white;
   text-align: center;
   padding: 1.5rem 1rem;
 }
 
+header h1 {
+  margin: 0 0 0.25rem;
+}
+
+header p {
+  margin: 0;
+}
+
+/* Title on the left, theme button on the right (stacks on mobile). */
+.header-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.theme-toggle {
+  font: inherit;
+  font-size: 0.9rem;
+  cursor: pointer;
+  padding: 0.45rem 0.9rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  background: transparent;
+  color: white;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.theme-toggle:hover {
+  background: white;
+  color: var(--brand-dark);
+}
+
+.theme-toggle:focus-visible {
+  outline: 3px solid #ffd166;
+  outline-offset: 2px;
+}
+
+/* Live clock line under the tagline. */
+.clock {
+  margin-top: 0.5rem;
+  font-size: 0.95rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.6rem;
+}
+
+.greeting {
+  opacity: 0.9;
+}
+
+.clock-time {
+  font-weight: bold;
+  /* Fixed width digits stop the text jumping as the seconds change. */
+  font-variant-numeric: tabular-nums;
+}
+
 nav {
-  background: #1f4e5a;
+  background: var(--brand-dark);
   display: flex;
   flex-direction: column; /* links stack on mobile */
   text-align: center;
@@ -28,7 +121,7 @@ nav a {
 }
 
 nav a:hover {
-  background: #2b6777;
+  background: var(--brand);
 }
 
 main {
@@ -41,16 +134,232 @@ section {
   margin-bottom: 2rem;
 }
 
+h2 {
+  border-bottom: 2px solid var(--border);
+  padding-bottom: 0.35rem;
+}
+
 img {
   max-width: 100%; /* images never overflow the screen */
   height: auto;
 }
 
 footer {
-  background: #1f4e5a;
+  background: var(--brand-dark);
   color: white;
   text-align: center;
   padding: 1rem;
+}
+
+/* ---------- Feature 3: project search ---------- */
+.project-filter {
+  margin-bottom: 1rem;
+}
+
+.project-filter label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 0.35rem;
+}
+
+.project-filter input {
+  width: 100%;
+  font: inherit;
+  padding: 0.6rem 0.75rem;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+
+.project-filter input:focus-visible {
+  outline: 3px solid var(--brand);
+  outline-offset: 1px;
+}
+
+.filter-status {
+  margin: 0.5rem 0 0;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.project-list {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.project-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.project-card h3 {
+  margin-top: 0;
+}
+
+/* The search hides cards with the hidden attribute. */
+.project-card[hidden] {
+  display: none;
+}
+
+.no-results {
+  margin: 0;
+  padding: 1rem;
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+  color: var(--muted);
+}
+
+/* ---------- Feature 4: contact form ---------- */
+.contact-form {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.field {
+  margin-bottom: 1rem;
+}
+
+.field label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 0.3rem;
+}
+
+.field input,
+.field textarea {
+  width: 100%;
+  box-sizing: border-box;
+  font: inherit;
+  padding: 0.6rem 0.75rem;
+  color: var(--text);
+  background: var(--page);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  resize: vertical;
+}
+
+.field input:focus-visible,
+.field textarea:focus-visible {
+  outline: 3px solid var(--brand);
+  outline-offset: 1px;
+}
+
+/* Red border and red helper text when validation fails. */
+.field input[aria-invalid="true"],
+.field textarea[aria-invalid="true"] {
+  border-color: var(--danger);
+}
+
+.field-error {
+  margin: 0.35rem 0 0;
+  font-size: 0.9rem;
+  color: var(--danger);
+}
+
+.char-count {
+  margin: 0.35rem 0 0;
+  font-size: 0.85rem;
+  text-align: right;
+  color: var(--muted);
+}
+
+.char-count.is-low {
+  color: var(--danger);
+  font-weight: bold;
+}
+
+.button {
+  font: inherit;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 0.7rem 1.2rem;
+  border: none;
+  border-radius: 6px;
+  background: var(--brand);
+  color: white;
+  transition: background-color 0.2s ease;
+}
+
+.button:hover {
+  background: var(--brand-dark);
+}
+
+.button:focus-visible {
+  outline: 3px solid #ffd166;
+  outline-offset: 2px;
+}
+
+.form-feedback {
+  margin: 0.75rem 0 0;
+  font-size: 0.95rem;
+}
+
+.form-feedback.is-error {
+  color: var(--danger);
+}
+
+.form-feedback.is-success {
+  color: var(--success);
+}
+
+/* Messages created by JavaScript are appended here. */
+.sent-messages {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0 0;
+}
+
+.sent-message {
+  display: block;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--brand);
+  border-radius: 6px;
+  padding: 0.6rem 0.8rem;
+  margin-bottom: 0.6rem;
+  font-size: 0.9rem;
+}
+
+.sent-message strong {
+  display: block;
+}
+
+/* ---------- Feature 5: back to top button ---------- */
+.back-to-top {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 10;
+  font: inherit;
+  font-size: 0.9rem;
+  cursor: pointer;
+  padding: 0.6rem 0.9rem;
+  border: none;
+  border-radius: 999px;
+  background: var(--brand);
+  color: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  /* Hidden until the scroll handler adds the is-visible class. */
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(10px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.back-to-top.is-visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.back-to-top:focus-visible {
+  outline: 3px solid #ffd166;
+  outline-offset: 2px;
 }
 
 /* ---------- Tablet (600px and up) ---------- */
@@ -62,6 +371,14 @@ footer {
   main {
     padding: 2rem;
   }
+  .header-inner {
+    flex-direction: row;
+    justify-content: space-between;
+    text-align: left;
+  }
+  .project-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 /* ---------- Desktop (1024px and up) ---------- */
@@ -69,7 +386,7 @@ footer {
   header h1 {
     font-size: 2.5rem;
   }
-  #projects article {
-    max-width: 600px;
+  .project-list {
+    grid-template-columns: repeat(3, 1fr);
   }
 }
